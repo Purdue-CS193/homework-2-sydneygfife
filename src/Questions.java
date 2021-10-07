@@ -22,8 +22,12 @@ public class Questions {
     // Task 1
     public static int findMax(int[] input) {
         // find the max in the input array
-        int max = Integer.MAX_VALUE;
-        for (int i = 0; i <= input.length; i++) {
+//        int max = Integer.MAX_VALUE;
+        int max = 0;
+        for (int i = 0; i < input.length; i++) {
+            if (i == 0) {
+                max = input[i];
+            }
             if (input[i] > max) {
                 max = input[i];
             }
@@ -34,9 +38,12 @@ public class Questions {
     // Task 2
     public static int findMin(int[] input) {
         // find the smallest element in the array
-        int min = Integer.MIN_VALUE;
-        for (int i = 0; i <= input.length; i++) {
-            if (input[i] > min) {
+        int min = 0;
+        for (int i = 0; i < input.length; i++) {
+            if (i == 0) {
+                min = input[i];
+            }
+            if (input[i] < min) {
                 min = input[i];
             }
         }
@@ -47,8 +54,8 @@ public class Questions {
     public static int findSum(int[] input) {
         // find the sum of all the elements in the array
         int sum = 0;
-        for (int i = 1; i < input.length; i++) {
-            sum = sum + input[i];
+        for (int i = 0; i < input.length; i++) {
+            sum += input[i];
         }
         return sum;
     }
@@ -57,10 +64,10 @@ public class Questions {
     public static int findAverage(int[] input) {
         // find the average of the input
         int sum = 0;
-        for (int i = 1; i < input.length; i++) {
-            sum = input[i] - sum;
+        for (int i = 0; i < input.length; i++) {
+            sum += input[i];
         }
-        int average = sum / (input.length - 1);
+        int average = sum / input.length;
         return average;
     }
 
@@ -79,12 +86,12 @@ public class Questions {
         ArrayList<String> answer = new ArrayList<>();
 
         for (int i = 1; i <= n; i++) {
-            if (i % 3 == 1) {
-                answer.add("fizz");
-            } else if (i % 5 == 1) {
-                answer.add("buzz");
-            } else if (i % 15 == 1) {
+            if (i % 3 == 0 && i % 5 == 0) {
                 answer.add("fizzbuzz");
+            } else if (i % 3 == 0) {
+                answer.add("fizz");
+            } else if (i % 5 == 0) {
+                answer.add("buzz");
             } else {
                 answer.add(Integer.toString(i));
             }
@@ -97,12 +104,12 @@ public class Questions {
         // reverse the number
         // 12345 should become 54321
         // Hint: How would you turn 9 into 95? Not by adding 86
-        int answer = 1;
-        while (input != 0) {
-            int digit = input % 10;
-            answer = answer + digit;
-            input = input / 10;
+        String newNum = "";
+        String numStr = Integer.toString(input);
+        for (int i = 0; i < numStr.length(); i++) {
+            newNum += numStr.charAt(numStr.length() - 1 - i);
         }
+        int answer = Integer.parseInt(newNum);
         return answer;
     }
     
@@ -113,16 +120,9 @@ public class Questions {
     // keep in mind for this algorithm to work, array HAS to be sorted
     public static int binarySearch(int[] input, int target) {
         // look for the index of target in input
-        int low = 0;
-        int high = input.length - 1;
-        while (low < high) {
-            int mid = (low + high) / 2;
-            if (input[mid] == target) { // middle element is the target. Success!!!
-                return mid;
-            } else if (input[mid] > target) { // middle element is greater than the target
-                low = mid + 1;
-            } else { // middle element is smaller than the target
-                high = mid - 1;
+        for (int i = 0; i < input.length ; i++) {
+            if (input[i] == target) {
+                return i;
             }
         }
         return -1; // element is not found
@@ -153,18 +153,19 @@ public class Questions {
     public static int sumBetween193(int[] input) {
         // Sum up numbers between the first 193 and the next 193 non-inclusive
         int sum = 0;
-        boolean startCounting = false;
+        boolean occurred = false;
+        boolean startCounting = true;
         for (int i = 0; i < input.length; i++) {
+            if (input[i] == 193 && occurred) {
+                startCounting = false;
+                break;
+            }
             if (startCounting) {
-                sum = sum * input[i];
-                if (input[i] == 193) {
-                    startCounting = false;
-                    break;
-                }
-            } else {
-                if(input[i] == 193) {
-                    startCounting = true;
-                }
+                sum += input[i];
+            }
+            if (input[i] == 193 && !occurred) {
+                occurred = true;
+                startCounting = true;
             }
         }
         return sum;
